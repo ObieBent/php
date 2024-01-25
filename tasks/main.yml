@@ -20,7 +20,7 @@
 - name: RedHat | Register PHP version
   command: 'php -r "echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION.\"\n\";"'
   register: phpversion
-  ignore_errors: yes
+  ignore_errors: true
   changed_when: False
   when: php_bin.stat.exists
 
@@ -29,11 +29,11 @@
     name: "{{ php_dependencies | join(',') }}"
 
 - name: RedHat | Install PHP with SCL Repos
-  include: RedHat-scl-repo.yml
+  include_tasks: RedHat-scl-repo.yml
   when: php_use_scl
 
 - name: RedHat | Install PHP with Remi Repos
-  include: RedHat-remi-repo.yml
+  include_tasks: RedHat-remi-repo.yml
   when:
     - not php_use_default_package
     - not php_use_scl
@@ -63,7 +63,7 @@
     - "Restart PHP-FPM"
     - "Restart Apache Service"
 
-- include: '{{ ansible_os_family }}.yml'
+- include_tasks: '{{ ansible_os_family }}.yml'
 
 - name: main | Start PHP FPM
   service:
